@@ -17,33 +17,26 @@ logging.basicConfig(
 )
 
 # Define global variables for temperature monitoring
-SMOKER_TEMPERATURES = deque(maxlen=5)  # Max length for the smoker time window
-FOOD_TEMPERATURES = deque(maxlen=20)   # Max length for the food time window
+SMOKER_TEMPERATURES = deque(maxlen=5)  # Max smoker time window
+FOOD_TEMPERATURES = deque(maxlen=20)   # Max food time window
 
-SMOKER_ALERT_THRESHOLD = 15.0  # Smoker temperature decrease threshold (in degrees F)
-FOOD_STALL_THRESHOLD = 1.0     # Food temperature change threshold (in degrees F)
+SMOKER_ALERT_THRESHOLD = 15.0  # Smoker temperature decrease threshold 
+FOOD_STALL_THRESHOLD = 1.0     # Food temperature change threshold 
 
 def process_temperature(body, temperature_name, temperature_deque, alert_threshold):
     '''
-    This function reads and shows the temperature recorded.
-    Additionally, this function also alerts the user to fatal drastic temperature changes (>15F in 2.5 minutes for the smoker and >1F in 10 minutes for food).
-    
-    Parameters:
-        body
-        temperature_name
-        temperature_deque
-        alert_threshold
+    T
     '''
     try:
         # break up the message sent from the producer file into 2 strings
         timestamp_str, temperature_str = body.decode().split(',')
-        # convert the timestamp string into a datetime object
+        
         timestamp = datetime.datetime.strptime(timestamp_str, '%m/%d/%y %H:%M:%S')
         
-        # Strip leading and trailing whitespace, handle 'None' values, and convert to float
-        # Added this as I was having trouble with None values
+        
+        
         temperature = float(temperature_str.strip()) if temperature_str.strip().lower() != 'none' else None
-        # Add timestamp and recorded temp to deque
+        
         temperature_deque.append((timestamp, temperature))
 
         # Check for alert condition
@@ -76,11 +69,11 @@ def get_time_window(temperature_name):
         temperature_name
     '''
     if temperature_name == "Smoker":
-        return 2.5  # Smoker time window is 2.5 minutes
+        return 2.5  # Smoker time window 2.5 minutes
     elif temperature_name == "Food A":
-        return 10.0   # Food time window is 10 minutes
+        return 10.0   # Food time window 10 minutes
     elif temperature_name == "Food B":
-        return 10.0   # Food time window is 10 minutes
+        return 10.0   # Food time window 10 minutes
     else:
         return None
 
@@ -125,24 +118,15 @@ def main(hn: str = "localhost"):
         channel = connection.channel()
 
         for queue_name, callback_function in queues_and_callbacks:
-            # use the channel to declare a durable queue
-            # a durable queue will survive a RabbitMQ server restart
-            # and help ensure messages are processed in order
+     
             # messages will not be deleted until the consumer acknowledges
             channel.queue_declare(queue=queue_name, durable=True)
 
-            # The QoS level controls the # of messages
-            # that can be in-flight (unacknowledged by the consumer)
-            # at any given time.
-            # Set the prefetch count to one to limit the number of messages
-            # being consumed and processed concurrently.
-            # This helps prevent a worker from becoming overwhelmed
-            # and improve the overall system performance.
+           
             # prefetch_count = Per consumer limit of unacknowledged messages
             channel.basic_qos(prefetch_count=1)
 
-            # configure the channel to listen on a specific queue,
-            # use the appropriate callback function,
+
             # and do not auto-acknowledge the message (let the callback handle it)
             channel.basic_consume(queue=queue_name, on_message_callback=callback_function, auto_ack=False)
 
@@ -167,10 +151,7 @@ def main(hn: str = "localhost"):
         connection.close()
 
 
-# Standard Python idiom to indicate main program entry point
-# This allows us to import this module and use its functions
-# without executing the code below.
-# If this is the program being run, then execute the code below
+
 if __name__ == "__main__":
     # call the main function with the information needed
     main("localhost")
