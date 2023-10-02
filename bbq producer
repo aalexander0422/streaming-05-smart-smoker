@@ -1,6 +1,5 @@
 """
     This program sends a message to a queue on the RabbitMQ server.
-    Make tasks harder/longer-running by adding dots at the end of the message.
 
     Ashlee Alexander 9/27
      
@@ -30,16 +29,7 @@ def rabbit_admin():
 
 
 def send_reading(channel, queue_name, timestamp, temperature):
-    """
-    Creates and sends a temperature reading to the queue each execution.
-    This process runs and finishes.
-
-    Parameters:
-        host: the host name or IP address of the RabbitMQ server
-        queue_name: the name of the queue
-        timestamp: the time at which the temperature reading was taken
-        temperature: the temperature reading to be sent to the queue
-    """
+    " "
 def send_reading(channel, queue_name, timestamp, temperature):
     channel.basic_publish(exchange="", routing_key=queue_name, body=f"{timestamp},{temperature}")
     logging.info(f"Sent to {queue_name} Queue: Timestamp={timestamp}, Temperature={temperature}")
