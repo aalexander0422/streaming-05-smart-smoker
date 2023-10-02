@@ -80,4 +80,4 @@
 # What was most interesting:
 # Part 2 - Self Assessment
 
-# From the Module 5: Overview, paste the numbered list of objectives and assess your ability on each as "Highly proficient", "Proficient", or "Not Proficient":
+# From the Module 5: Overview, paste the numbered list of objectives and assess your ability on each as "Highly proficient", "Proficient", or "Not Proficient":"
